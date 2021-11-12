@@ -1,3 +1,6 @@
 #aksepter parameter
-param([String]$navn)
+param(
+    [String]
+    $navn
+)
 Write-Host "Hei $navn!"
