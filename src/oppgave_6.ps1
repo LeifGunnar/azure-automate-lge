@@ -6,8 +6,13 @@ param (
 )
 
 $ErrorActionPreference = 'Stop'
-
-$Response = Invoke-WebRequest -Uri $UrlKortstokk
+try {
+    $Response = Invoke-WebRequest -Uri $UrlKortstokk    
+}
+catch {
+    Write-Host "Not a valid url $UrlKortstokk"
+    exit 1
+}
 
 $Cards = $Response.Content | ConvertFrom-Json
 
