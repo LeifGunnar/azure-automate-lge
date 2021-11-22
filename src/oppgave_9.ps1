@@ -68,21 +68,37 @@ function skrivUtResultat {
     if ( $poengmeg -eq 21 -and $poengmagnus -eq 21) {
         #Draw
         Write-Host "Vinner: Draw"
+        Write-Host "Magnus | $poengmagnus | $(KortstokkPrint($magnus))"
+        Write-Host "Meg | $poengmeg | $(KortstokkPrint($meg))"
     }
     elseif ( $poengmeg -eq 21) {
         # jeg vant
         Write-Host "Vinner: Meg"
+        Write-Host "Magnus | $poengmagnus | $(KortstokkPrint($magnus))"
+        Write-Host "Meg | $poengmeg | $(KortstokkPrint($meg))"           
     }
     elseif ( $poengmagnus -eq 21 ) {
         # magnus vant
         Write-Host "Vinner: Magnus"
+        Write-Host "Magnus | $poengmagnus | $(KortstokkPrint($magnus))"
+        Write-Host "Meg | $poengmeg | $(KortstokkPrint($meg))"         
+    }
+    elseif ($poengmeg -gt 21) {
+        # magnus vant
+        Write-Host "Vinner: Magnus"
+        Write-Host "Magnus | $poengmagnus | $(KortstokkPrint($magnus))"
+        Write-Host "Meg | $poengmeg | $(KortstokkPrint($meg))"   
+    }
+    elseif ($poengmagnus -gt 21) {
+              # jeg vant
+              Write-Host "Vinner: Meg"
+              Write-Host "Magnus | $poengmagnus | $(KortstokkPrint($magnus))"
+              Write-Host "Meg | $poengmeg | $(KortstokkPrint($meg))"           
     }
     else {
         #unknown
         Write-Host "Unknown result"
     }
-    Write-Host "Magnus | $poengmagnus | $(KortstokkPrint($magnus))"
-    Write-Host "Meg | $poengmeg | $(KortstokkPrint($meg))"
 }
 
 
@@ -94,6 +110,18 @@ $meg = $cards[0..1]
 $cards = $cards[2..$cards.Length]
 $magnus = $cards[0..1]
 $cards = $cards[2..$cards.Length]
+
+# meg trekker kort
+while ($(KortSum($meg)) -lt 17 ) {
+    $meg += $cards[0]
+    $cards = $cards[1..$cards.Length]
+}
+
+# magnus trekker kort
+while ($(KortSum($magnus)) -le $(KortSum($meg)) ) {
+    $magnus += $cards[0]
+    $cards = $cards[1..$cards.Length]
+}
 
 # Calculate and print result
 skrivUtResultat $meg  $magnus
