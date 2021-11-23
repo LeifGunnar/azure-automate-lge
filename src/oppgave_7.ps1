@@ -46,7 +46,7 @@ function KortstokkPrint {
         $cards    
     )
     $Kortstokk = @()
-    foreach ($card in $Cards) {
+    foreach ($card in $cards) {
         $Kortstokk += ($card.suit)[0] + $card.value 
     }
     $Kortstokk
