@@ -140,5 +140,3 @@ if ($(KortSum($meg)) -ne $blackjack -and $(KortSum($magnus)) -ne $blackjack ) {
 # Calculate and print result
 skrivUtResultat $(finnVinner $meg $magnus) $meg  $magnus
    
-Write-Host "Kortstokk: $(KortstokkPrint($cards))"
-
