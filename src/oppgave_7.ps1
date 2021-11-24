@@ -28,9 +28,7 @@ function KortSum {
     $Sum = 0
     foreach ($card in $Cards) {
         $Sum += switch ($card.value) {
-            'J' { 10 }
-            'Q' { 10 }
-            'K' { 10 }
+            { $_ -cin @('J', 'Q', 'K') } { 10 }
             'A' { 11 }
             Default { $card.value }
         }
@@ -41,6 +39,8 @@ function KortSum {
 # Returnerer kortstokk på formen CA H6 D9
 function KortstokkPrint {
     param (
+
+
         [Parameter()]
         [Object[]]
         $cards    

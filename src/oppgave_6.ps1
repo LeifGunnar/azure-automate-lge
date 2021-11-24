@@ -1,6 +1,6 @@
 [CmdletBinding()]
 param (
-    [Parameter()]
+    [Parameter(HelpMessage = "Url til kortstokk")]
     [string]
     $UrlKortstokk = "http://nav-deckofcards.herokuapp.com/shuffle"
 )
@@ -21,9 +21,7 @@ $Cards = $Response.Content | ConvertFrom-Json
 $Sum = 0
 foreach ($card in $Cards) {
     $Sum += switch ($card.value) {
-        'J' { 10 }
-        'Q' { 10 }
-        'K' { 10 }
+        { $_ -cin @('J', 'Q', 'K') } { 10 }
         'A' { 11 }
         Default { $card.value }
     }
