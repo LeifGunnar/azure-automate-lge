@@ -28,9 +28,7 @@ function KortSum {
     $Sum = 0
     foreach ($card in $Cards) {
         $Sum += switch ($card.value) {
-            'J' { 10 }
-            'Q' { 10 }
-            'K' { 10 }
+            { $_ -cin @('J', 'Q', 'K') } { 10 }
             'A' { 11 }
             Default { $card.value }
         }
@@ -52,8 +50,7 @@ function KortstokkPrint {
     $Kortstokk
 }
 
-
-function skrivUtResultat {
+function finnVinner {
     param (
         [Parameter()]
         [System.Object[]]
@@ -64,31 +61,50 @@ function skrivUtResultat {
     )
     $poengmeg = KortSum($meg)
     $poengmagnus = KortSum($magnus)
+    $blackjack = 21
 
-    if ( $poengmeg -eq 21 -and $poengmagnus -eq 21) {
-        #Draw
-        Write-Host "Vinner: Draw"
+    if ( $poengmeg -eq $blackjack -and $poengmagnus -eq $blackjack) {
+        # Draw
+        "Draw"
     }
-    elseif ( $poengmeg -eq 21) {
+    elseif ( $poengmeg -eq $blackjack) {
         # jeg vant
-        Write-Host "Vinner: Meg"
+        "Meg"
     }
-    elseif ( $poengmagnus -eq 21 ) {
+    elseif ( $poengmagnus -eq $blackjack) {
         # magnus vant
-        Write-Host "Vinner: Magnus"
+        "Magnus"
     }
-    elseif ($poengmeg -gt 21) {
+    elseif ($poengmeg -gt $blackjack) {
         # magnus vant
-        Write-Host "Vinner: Magnus"
+        "Magnus"
     }
-    elseif ($poengmagnus -gt 21) {
+    elseif ($poengmagnus -gt $blackjack) {
         # jeg vant
-        Write-Host "Vinner: Meg"
+        "Meg"
     }
     else {
         # magnus vant, begge har mindre enn 21, så da har magnus mest
-        Write-Host "Vinner: Magnus"     
-    } 
+        "Magnus"     
+    }
+}
+
+function skrivUtResultat {
+    param (
+        [Parameter()]
+        [string]
+        $vinner,
+        [Parameter()]
+        [System.Object[]]
+        $meg,
+        [Parameter()]
+        [System.Object[]]
+        $magnus
+    )
+    $poengmeg = KortSum($meg)
+    $poengmagnus = KortSum($magnus)
+
+    Write-Host "Vinner: $vinner"      
     Write-Host "Magnus | $poengmagnus | $(KortstokkPrint($magnus))"
     Write-Host "Meg | $poengmeg | $(KortstokkPrint($meg))"
 }
@@ -103,23 +119,26 @@ $cards = $cards[2..$cards.Length]
 $magnus = $cards[0..1]
 $cards = $cards[2..$cards.Length]
 
-if ($(KortSum($meg)) -ne 21 -and $(KortSum($magnus)) -ne 21 ) {
+$blackjack = 21
+
+if ($(KortSum($meg)) -ne $blackjack -and $(KortSum($magnus)) -ne $blackjack ) {
     #ingen har 21, begynn å trekke kort
     # meg trekker kort
     while ($(KortSum($meg)) -lt 17 ) {
         $meg += $cards[0]
         $cards = $cards[1..$cards.Length]
     }
-    # magnus trekker kort
-    if ($(KortSum($meg)) -le 21) {
-        while ($(KortSum($magnus)) -ne 21 -and $(KortSum($magnus)) -le $(KortSum($meg)) ) {
+    # magnus trekker kort hvis jeg ikke har mere enn 21 poeng
+    # trekker inntil magnus får mere enn meg eller 21
+    if ($(KortSum($meg)) -le $blackjack) {
+        while ($(KortSum($magnus)) -ne $blackjack -and $(KortSum($magnus)) -le $(KortSum($meg)) ) {
             $magnus += $cards[0]
             $cards = $cards[1..$cards.Length]
         }
     }
 }
 # Calculate and print result
-skrivUtResultat $meg  $magnus
+skrivUtResultat $(finnVinner $meg $magnus) $meg  $magnus
    
 Write-Host "Kortstokk: $(KortstokkPrint($cards))"
 
