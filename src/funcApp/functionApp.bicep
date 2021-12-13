@@ -58,6 +58,7 @@ resource functionApp 'Microsoft.Web/sites@2021-02-01' = {
     httpsOnly: true
     serverFarmId: hostingPlan.id
     siteConfig: {
+      powerShellVersion: '~7' 
       appSettings: [
         {
           name: 'AzureWebJobsStorage'
