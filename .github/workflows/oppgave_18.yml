@@ -20,9 +20,12 @@ jobs:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
           enable-AzPSSession: true
 
-      - name: Deploy Function app
-        run: ./src/funcApp/cleanup.ps1 -resourceGroupName 'leif-workshop-irzkzczujtnqc'
-
+      - name: 'Run cleanup script'
+        uses: azure/powershell@v1
+        with:
+          inlineScript: ./src/funcApp/cleanup.ps1 -resourceGroupName 'leif-workshop-irzkzczujtnqc'
+          azPSVersion: "latest"
+    
       - name: 'logout from azure'
         uses: azure/powershell@v1
         with:
