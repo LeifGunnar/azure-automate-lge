@@ -34,5 +34,4 @@ jobs:
           modules-to-cache: Az.Storage, Az.Functions, Az.Websites, Az.Resources, Az.Accounts
 
       - name: Deploy Function app
-        run: ./src/funcApp/deployWithBicep.ps1
-        
+        run: ./src/funcApp/deployWithBicep.ps1 -firstname 'leif' -resourceGroupName 'leif-workshop-irzkzczujtnqc'
